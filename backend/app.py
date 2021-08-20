@@ -1,81 +1,66 @@
-from flask import Flask
-from flask.globals import request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, request, jsonify
+import sqlite3
 from flask_cors import CORS
+import requests
 
 # Create App
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///nba-stats.db"
 CORS(app)
-
-# DB
-db = SQLAlchemy(app)
-
-# Player class to add new player to db
-class Player(db.Model):
-    id = db.Column('id', db.Integer, primary_key = True) # primary_key makes it so that this value is unique and can be used to identify this record.
-    first_name = db.Column(db.String(24))
-    last_name = db.Column(db.String(24))
-
-    # Constructor
-    def __init__(self, id, first_name, last_name):
-        self.id = id
-        self.first_name = first_name
-        self.last_name = last_name
-
 
 ### Variables ###
 
-last_name = ""
-
-url_search = 'https://www.balldontlie.io/api/v1/players?search='
 
 ### Methods ###
 
-def add_player_to_db(id, first_name, last_name):
-    
-    if (id and first_name and last_name):
-        try:
-            player = Player(id, first_name,last_name)
-            db.session.add(player)
-            db.session.commit()
-            return True
-        except Exception as e:
-            print(e)
-            return False
-        
 
-def search_for_player(last_name):
-    
-    json_response = url_search + last_name.lower().json()
-    return json_response
-    
-    # for player in json_response['data']:
-    #     player_id = player['id']
-    #     player_first_name = player['first_name']
-    #     player_last_name = player['last_name']
-    #     add_player_to_db(player_id, player_first_name, player_last_name)
-
+### Routes ###
 
 @app.route('/', methods = ["GET", "POST"])
 def index():
     return "hello world"
 
 
-@app.route('/getname', methods=['GET', 'POST'])
-def get_name():
+@app.route('/search/<name>/<year>', methods=['GET','POST'])
+def search(name, year):
     
-    data = request.get_json()
-    
-    if not data:
-        return {'msg': 'Missing JSON'}, 400
-    else:
-        return data
+    if request.method == 'GET':
+        
+        # Connect to the db
+        conn = sqlite3.connect(('players.db'))
+        c = conn.cursor()
+        
+        # Create an array to hold the db query results
+        results = []
+        
+        # Execute db query based on the last name searched by user
+        for row in c.execute("SELECT * FROM all_players WHERE last_name LIKE ?", ('%'+name+'%',)).fetchall():
+                results.append(row)
+        
+        # Base url to make 
+        base_url = 'https://www.balldontlie.io/api/v1/season_averages?season=' + year
+        
+        # create a string of all the player IDs to query
+        player_ids_query = ''
+        
+        for result in results:
+            player_ids_query += '&player_ids[]=' + str(result[0])
 
-# API route to add new player to db
-@app.route('/addplayer', methods=["POST"])
-def add_player_to_db():
-    pass
+        res = requests.get(base_url + player_ids_query).json()
+        
+        data = res['data']
+        
+        # Create dictionary to print results to endpoint
+        player_json = {}
+        
+        for player in data:
+            for result in results:
+                if player['player_id'] == result[0]:
+                    key = result[1] + " " + result[2]
+                    player_json[key] = player
+        
+        conn.close()
+        
+        return player_json
 
 
 if __name__ == '__main__':
