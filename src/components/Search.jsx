@@ -53,32 +53,32 @@ class Search extends Component {
                 let table = (
                     <div className="player_table">
                         <tr>
-                            <td>SEASON</td>
-                            <td>GAMES</td>
-                            <td>MIN</td>
-                            <td>FG%</td>
-                            <td>FG3%</td>
-                            <td>FT%</td>
-                            <td>REB</td>
-                            <td>AST</td>
-                            <td>BLK</td>
-                            <td>STL</td>
-                            <td>TO</td>
-                            <td>FOULS</td>
+                            <td className='column_header'>SEASON</td>
+                            <td className='column_header'>GAMES</td>
+                            <td className='column_header'>MIN</td>
+                            <td className='column_header'>FG%</td>
+                            <td className='column_header'>FG3%</td>
+                            <td className='column_header'>FT%</td>
+                            <td className='column_header'>REB</td>
+                            <td className='column_header'>AST</td>
+                            <td className='column_header'>BLK</td>
+                            <td className='column_header'>STL</td>
+                            <td className='column_header'>TO</td>
+                            <td className='column_header'>FOULS</td>
                         </tr>
                         <tr>
-                            <td>{value['season']}</td>
-                            <td>{value['games_played']}</td>
-                            <td>{value['min']}</td>
-                            <td>{value['fg_pct']}</td>
-                            <td>{value['fg3_pct']}</td>
-                            <td>{value['ft_pct']}</td>
-                            <td>{value['reb']}</td>
-                            <td>{value['ast']}</td>
-                            <td>{value['blk']}</td>
-                            <td>{value['stl']}</td>
-                            <td>{value['turnover']}</td>
-                            <td>{value['pf']}</td>
+                            <td className='column_data'>{value['season']}</td>
+                            <td className='column_data'>{value['games_played']}</td>
+                            <td className='column_data'>{value['min']}</td>
+                            <td className='column_data'>{value['fg_pct']}</td>
+                            <td className='column_data'>{value['fg3_pct']}</td>
+                            <td className='column_data'>{value['ft_pct']}</td>
+                            <td className='column_data'>{value['reb']}</td>
+                            <td className='column_data'>{value['ast']}</td>
+                            <td className='column_data'>{value['blk']}</td>
+                            <td className='column_data'>{value['stl']}</td>
+                            <td className='column_data'>{value['turnover']}</td>
+                            <td className='column_data'>{value['pf']}</td>
                         </tr>
                     </div>
 
@@ -105,17 +105,20 @@ class Search extends Component {
         }
     }
 
-    
-
-
     render () {
         return (
             <div>
-                <form onSubmit={this.formSubmit}>
-                    <label htmlFor="name" className="name_label">Name</label>
-                    <input type="text" className="name_input" id="name" />
-                    <label htmlFor="year" className="year_label">Year</label>
-                    <input type="text" className="year_input" id="year" />
+                <form className='search_form' onSubmit={this.formSubmit}>
+                    <div className="input_container">
+                        <div className="name_container">
+                            <label htmlFor="name" className="name_label">Name</label>
+                            <input type="text" className="name_input" id="name" />
+                        </div>
+                        <div className="year_container">
+                            <label htmlFor="year" className="year_label">Year</label>
+                            <input type="text" className="year_input" id="year" />
+                        </div>
+                    </div>
                     <button className="search_btn">Search</button>
                 </form>
                 
