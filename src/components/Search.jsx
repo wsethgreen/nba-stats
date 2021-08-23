@@ -26,7 +26,7 @@ class Search extends Component {
     }
 
     
-    displayData = (e) => {
+    displayData = () => {
         // If no api call has been made yet, render text advising user to search for player
         if (this.state.isLoading) {
             let empty_header = React.createElement("h1", {className: "empty_header"}, "Search for a player and year to see their average stats that year.")
@@ -59,6 +59,7 @@ class Search extends Component {
                             <td className='column_header'>FG%</td>
                             <td className='column_header'>FG3%</td>
                             <td className='column_header'>FT%</td>
+                            <td className='column_header'>PTS</td>
                             <td className='column_header'>REB</td>
                             <td className='column_header'>AST</td>
                             <td className='column_header'>BLK</td>
@@ -73,6 +74,7 @@ class Search extends Component {
                             <td className='column_data'>{value['fg_pct']}</td>
                             <td className='column_data'>{value['fg3_pct']}</td>
                             <td className='column_data'>{value['ft_pct']}</td>
+                            <td className='column_data'>{value['pts']}</td>
                             <td className='column_data'>{value['reb']}</td>
                             <td className='column_data'>{value['ast']}</td>
                             <td className='column_data'>{value['blk']}</td>
