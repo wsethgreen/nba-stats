@@ -7,7 +7,7 @@ from Player import Player
 all_players_api_url = 'https://www.balldontlie.io/api/v1/players?per_page=100&page='
 all_players_json = requests.get(all_players_api_url).json()
 
-# api call page number variables
+# api call total page number variable
 total_page_numbers = all_players_json['meta']['total_pages']
 
 # Array to hold all players from api
