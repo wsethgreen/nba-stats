@@ -1,6 +1,5 @@
 import sqlite3
 from api import all_players_list
-import requests
 
 conn = sqlite3.connect('players.db')
 

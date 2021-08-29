@@ -1,4 +1,5 @@
-from search_func import search_db
+import search_func
+from unittest.mock import MagicMock
 
 def test_search_db():
     
@@ -29,5 +30,10 @@ def test_search_db():
         }
     }
     
-    assert search_db('garland', '2020') == garland_json
+    # Search for sqlite mocking for python
+    
+    
+    mock_object(search_func.sqlite3.Cursor, 'execute', MagicMock(return_value=garland_json))
+    
+    assert search_func.search_db('garland', '2020') == garland_json
 

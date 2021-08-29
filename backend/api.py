@@ -4,6 +4,7 @@ from Player import Player
 
 
 # Run initial api call to get all players listed.
+# Add a base url and then add 'players', 'stats', etc.
 all_players_api_url = 'https://www.balldontlie.io/api/v1/players?per_page=100&page='
 all_players_json = requests.get(all_players_api_url).json()
 
@@ -15,7 +16,7 @@ total_page_numbers = all_players_json['meta']['total_pages']
 # index 0 = player id
 # index 1 = player first name
 # index 2 = player last name
-all_players_list =[]
+all_players_list = []
 
 # Array to hold all player objects who have stats in the 2020 season
 active_player_objects =[]
@@ -28,10 +29,8 @@ def get_response(base_url, page_number):
 def parse_json(response):
     
     for player in response:
-        id = player['id']
-        first_name = player['first_name']
-        last_name = player['last_name']
-        all_players_list.append([id, first_name, last_name])
+        new_player = Player(player['id'], player['first_name'], player['last_name'])
+        all_players_list.append(new_player)
 
 
 for page in range(1, total_page_numbers + 1):
@@ -42,6 +41,4 @@ for page in range(1, total_page_numbers + 1):
     except:
         print("api request limit met")
 
-# API url to call to determine if a player has stats in the 2020 season
-single_player_api_url = 'https://www.balldontlie.io/api/v1/stats?seasons[]=2020&per_page=100&player_ids[]='
 
